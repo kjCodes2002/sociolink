@@ -32,12 +32,15 @@ const Navbar = ({ user }: { user: User | null }) => {
   };
   return (
     <div className="mb-8 flex justify-between">
-      <h2 className="text-3xl font-bold font-bricolage">
+      <h2
+        className="text-3xl font-bold font-bricolage cursor-pointer"
+        onClick={() => navigate("/")}
+      >
         <span className="text-mainTextDark">Socio</span>
         <span className="text-green-500">Link</span>
       </h2>
       <Button
-        variant={user ? "destructive" : "default"}
+        variant={user ? "outline" : "default"}
         size={"sm"}
         onClick={() => handleClick()}
         disabled={loading}

@@ -65,6 +65,7 @@ const CreateProfilePage = () => {
           id="picture"
           type="file"
           accept="image/*"
+          required
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (!file) return;
@@ -85,6 +86,7 @@ const CreateProfilePage = () => {
           name="username"
           value={formData.username}
           onChange={handleChange}
+          required
         />
         <Textarea
           placeholder="add your bio..."
@@ -92,6 +94,7 @@ const CreateProfilePage = () => {
           name="bio"
           value={formData.bio}
           onChange={handleChange}
+          required
         />
         <Button type="submit" className="max-w-24" disabled={loading}>
           {loading ? "Creating" : "Create"}
