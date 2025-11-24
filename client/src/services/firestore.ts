@@ -1,5 +1,5 @@
 import {db} from './firebaseConfig.ts';
-import { doc, setDoc, getDoc, writeBatch, collection, query, where, getDocs } from "firebase/firestore";
+import { doc, setDoc, getDoc, writeBatch, collection, query, where, getDocs, deleteDoc } from "firebase/firestore";
 import {auth} from './firebaseConfig.ts';
 import { supabase } from './supabaseConfig.ts';
 
@@ -134,5 +134,17 @@ export const editLinks = async(links: EditLinkProps[]): Promise<{success: boolea
     } catch (error: any) {
         console.log(error);
         return {success: false, reason: error? error.message: "Some error occurred"};
+    }
+}
+
+export const deleteLink = async(id: string): Promise<{success: boolean, reason?: string}>=> {
+    try {
+        await deleteDoc(doc(db, 'link', id));
+        return {success: true};
+    } catch (error: any) {
+        console.log(error);
+        return {success: false,
+            reason: error? error.message : "Some error occurred"
+        };
     }
 }

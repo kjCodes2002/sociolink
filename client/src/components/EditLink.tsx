@@ -2,6 +2,17 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Pencil, Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 type LinkProp = {
   id: string;
   uid: string;
@@ -11,9 +22,13 @@ type LinkProp = {
 const EditLink = ({
   link,
   handleChange,
+  handleDelete,
+  deleting,
 }: {
   link: LinkProp;
   handleChange: (id: string, name: string, value: string) => void;
+  handleDelete: (id: string) => void;
+  deleting: boolean;
 }) => {
   const [enableEdit, setEnableEdit] = useState(true);
   return (
@@ -42,9 +57,35 @@ const EditLink = ({
       >
         <Pencil />
       </Button>
-      {/* <Button variant={"secondary"} className="max-w-8" type="button">
-        <Trash />
-      </Button> */}
+      {/* DELETE BUTTON WITH ALERT */}
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            className="max-w-8"
+            disabled={deleting}
+          >
+            <Trash />
+          </Button>
+        </AlertDialogTrigger>
+
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this link?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. It will permanently delete the link.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => handleDelete(link.id)}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

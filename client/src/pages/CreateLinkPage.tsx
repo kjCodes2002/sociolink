@@ -63,7 +63,7 @@ const CreateLinkPage = () => {
         throw new Error(res.reason);
       }
       toast.success("links added successfully");
-      navigate("/");
+      navigate(`/user/${user.uid}`);
     } catch (error: any) {
       toast.error(error.message || "Some error occurred");
     } finally {

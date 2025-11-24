@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { auth } from "../services/firebaseConfig";
 import { useEffect, useState } from "react";
-import { getLinks, editLinks } from "@/services/firestore";
+import { getLinks, editLinks, deleteLink } from "@/services/firestore";
 import { Button } from "@/components/ui/button";
 import EditLink from "@/components/EditLink";
 import { toast } from "sonner";
@@ -20,6 +20,8 @@ const EditLinkPage = () => {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,6 +85,23 @@ const EditLinkPage = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      setDeleting(true);
+      const res = await deleteLink(id);
+      if (!res.success) {
+        throw new Error(res.reason);
+      }
+      setLinks((prev) => prev.filter((item) => item.id !== id));
+      toast.success("Successfully deleted");
+    } catch (error: any) {
+      console.log(error);
+      setDeleteError(error.message || "Something went wrong");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) return <>Loading...</>;
   if (!links || links.length === 0)
     return (
@@ -95,7 +114,13 @@ const EditLinkPage = () => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
       {links.map((link) => (
-        <EditLink key={link.id} link={link} handleChange={handleChange} />
+        <EditLink
+          key={link.id}
+          link={link}
+          handleChange={handleChange}
+          handleDelete={handleDelete}
+          deleting={deleting}
+        />
       ))}
       <Button
         type="submit"
@@ -105,6 +130,7 @@ const EditLinkPage = () => {
         Save changes
       </Button>
       {submitError && <p>{submitError}</p>}
+      {deleteError && <p>{deleteError}</p>}
     </form>
   );
 };
