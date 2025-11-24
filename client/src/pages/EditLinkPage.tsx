@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { auth } from "../services/firebaseConfig";
 import { useEffect, useState } from "react";
-import { getLinks } from "@/services/firestore";
+import { getLinks, editLinks } from "@/services/firestore";
 import { Button } from "@/components/ui/button";
 import EditLink from "@/components/EditLink";
+import { toast } from "sonner";
 const EditLinkPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const EditLinkPage = () => {
   ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,6 +60,29 @@ const EditLinkPage = () => {
     );
   };
 
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      setSaving(true);
+      const body = links.map((link) => ({
+        id: link.id,
+        url: link.url,
+        platform: link.platform,
+      }));
+      const res = await editLinks(body);
+      if (!res.success) {
+        throw new Error(res.reason);
+      }
+      toast.success("Updated links successfully");
+      navigate(`/user/${id}`);
+    } catch (error: any) {
+      console.log(error);
+      setSubmitError(error.message || "Something went wrong");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) return <>Loading...</>;
   if (!links || links.length === 0)
     return (
@@ -67,11 +93,19 @@ const EditLinkPage = () => {
     );
   if (error) return <>{error}</>;
   return (
-    <div className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
       {links.map((link) => (
         <EditLink key={link.id} link={link} handleChange={handleChange} />
       ))}
-    </div>
+      <Button
+        type="submit"
+        className="max-w-28 bg-green-600 mt-4"
+        disabled={saving}
+      >
+        Save changes
+      </Button>
+      {submitError && <p>{submitError}</p>}
+    </form>
   );
 };
 

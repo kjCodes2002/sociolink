@@ -109,3 +109,30 @@ export const getLinks = async(uid: string): Promise<{success: boolean, results?:
         return {success: false, reason: error.message};
     }
 }
+
+type EditLinkProps = {
+    id: string;
+    url: string;
+    platform: string;
+}
+
+export const editLinks = async(links: EditLinkProps[]): Promise<{success: boolean, reason?: string}>=> {
+    try {
+        const batch = writeBatch(db);
+        links.forEach((link)=> {
+            if (!link.url.trim() || !link.platform.trim()) {
+                throw new Error("Invalid link data");
+            }
+            const ref = doc(db, 'link', link.id);
+            batch.update(ref, {
+                url: link.url,
+                platform: link.platform
+            })
+        })
+        await batch.commit();
+        return {success: true};
+    } catch (error: any) {
+        console.log(error);
+        return {success: false, reason: error? error.message: "Some error occurred"};
+    }
+}

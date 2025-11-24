@@ -23,25 +23,28 @@ const EditLink = ({
         name="platform"
         onChange={(e) => handleChange(link.id, "platform", e.target.value)}
         disabled={enableEdit}
+        required
       />
       <Input
         value={link.url}
         name="url"
         onChange={(e) => handleChange(link.id, "url", e.target.value)}
         disabled={enableEdit}
+        required
       />
       <Button
+        type="button"
         variant={"ghost"}
         className="max-w-8"
         onClick={() => {
-          setEnableEdit((prev) => !prev);
+          setEnableEdit(false);
         }}
       >
         <Pencil />
       </Button>
-      <Button variant={"secondary"} className="max-w-8">
+      {/* <Button variant={"secondary"} className="max-w-8" type="button">
         <Trash />
-      </Button>
+      </Button> */}
     </div>
   );
 };
