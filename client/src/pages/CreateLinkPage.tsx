@@ -107,7 +107,11 @@ const CreateLinkPage = () => {
           >
             <Plus />
           </Button>
-          <Button type="submit" className="max-w-20" disabled={loading}>
+          <Button
+            type="submit"
+            className="max-w-20 bg-green-600 hover:bg-green-700"
+            disabled={loading}
+          >
             Add
           </Button>
         </div>

@@ -96,7 +96,11 @@ const CreateProfilePage = () => {
           onChange={handleChange}
           required
         />
-        <Button type="submit" className="max-w-24" disabled={loading}>
+        <Button
+          type="submit"
+          className="max-w-24 bg-green-600 hover:bg-green-700"
+          disabled={loading}
+        >
           {loading ? "Creating" : "Create"}
         </Button>
       </form>

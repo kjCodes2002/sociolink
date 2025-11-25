@@ -15,6 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CreateProfilePage from "./pages/CreateProfilePage";
 import PublicRoute from "./components/PublicRoute";
 import EditLinkPage from "./pages/EditLinkPage";
+import EditProfilePage from "./pages/EditProfilePage";
 import { Toaster } from "sonner";
 const App = () => {
   const router = createBrowserRouter(
@@ -44,6 +45,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <CreateProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user/:id/editProfile"
+            element={
+              <ProtectedRoute>
+                <EditProfilePage />
               </ProtectedRoute>
             }
           />

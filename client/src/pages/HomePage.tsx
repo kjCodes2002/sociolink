@@ -1,4 +1,4 @@
-import { Link2, ArrowRight } from "lucide-react";
+import { Link, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/services/firebaseConfig";
 import { getUserProfile } from "@/services/firestore";
@@ -16,8 +16,8 @@ const HomePage = () => {
     <div className="pt-20 px-4">
       <div className="max-w-3xl mx-auto text-center space-y-8">
         {/* Logo/Icon */}
-        <div className="w-16 h-16 bg-linear-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
-          <Link2 className="w-8 h-8 text-white" />
+        <div className="w-14 h-14 bg-linear-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-4">
+          <Link className="w-8 h-8 text-white" />
         </div>
 
         {/* Hero Text */}
@@ -37,7 +37,7 @@ const HomePage = () => {
 
         {/* CTA Button */}
         <button
-          className="bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold px-10 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center gap-2 group"
+          className="bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center gap-2 group"
           onClick={async () => {
             const user = auth.currentUser;
             if (!user) {

@@ -80,7 +80,11 @@ const EditLink = ({
 
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={() => handleDelete(link.id)}>
+            <AlertDialogAction
+              onClick={() => handleDelete(link.id)}
+              className="bg-red-500 hover:bg-red-600
+              "
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

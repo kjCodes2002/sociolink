@@ -124,7 +124,7 @@ const EditLinkPage = () => {
       ))}
       <Button
         type="submit"
-        className="max-w-28 bg-green-600 mt-4"
+        className="max-w-28 bg-green-600 mt-4 hover:bg-green-700"
         disabled={saving}
       >
         Save changes
