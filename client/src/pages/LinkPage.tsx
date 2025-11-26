@@ -66,7 +66,7 @@ const LinkPage = () => {
   if (loading) return <>Loading...</>;
   return (
     <div>
-      <Hero profile={profile} />
+      <Hero profile={profile} id={id} isOwner={isOwner} />
       <LinkSection links={links} error={error} isOwner={isOwner} id={id} />
       <Footer isOwner={isOwner} />
     </div>

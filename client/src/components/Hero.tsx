@@ -1,10 +1,21 @@
 import pfp from "../assets/images/me.jpeg";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 type ProfileProps = {
   username: string;
   bio: string;
   imageUrl: string;
 };
-const Hero = ({ profile }: { profile: ProfileProps }) => {
+const Hero = ({
+  profile,
+  id,
+  isOwner,
+}: {
+  profile: ProfileProps;
+  id: string | undefined;
+  isOwner: boolean;
+}) => {
+  const navigate = useNavigate();
   return (
     <div className="flex gap-3 mb-8">
       <div>
@@ -20,6 +31,16 @@ const Hero = ({ profile }: { profile: ProfileProps }) => {
         </h3>
         <p className="font-medium text-mainTextLight">{profile.bio}</p>
       </div>
+      {isOwner && (
+        <Button
+          variant={"outline"}
+          onClick={() => {
+            navigate(`/user/${id}/editProfile`);
+          }}
+        >
+          Edit Profile
+        </Button>
+      )}
     </div>
   );
 };

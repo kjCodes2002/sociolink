@@ -5,6 +5,7 @@ import { getUserProfile, editUserProfile } from "@/services/firestore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 const EditProfilePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const EditProfilePage = () => {
     username: "",
     bio: "",
     imageUrl: "",
+    storagePath: "",
   });
 
   const [newImage, setNewImage] = useState<File | null>(null);
@@ -20,6 +22,7 @@ const EditProfilePage = () => {
   const [error, setError] = useState("");
   const [updateLoading, setupdateLoading] = useState(false);
   const [updateError, setUpdateError] = useState("");
+  const [disableSubmit, setDisableSubmit] = useState(true);
   useEffect(() => {
     const user = auth.currentUser;
     if (!user) {
@@ -47,6 +50,7 @@ const EditProfilePage = () => {
           username: userProfile.username,
           bio: userProfile.bio,
           imageUrl: userProfile.imageUrl ?? "",
+          storagePath: userProfile.storagePath ?? "",
         });
       } catch (err: any) {
         setError(err.message || "Some error occurred");
@@ -57,11 +61,41 @@ const EditProfilePage = () => {
 
     fetchData();
   }, [navigate]);
+  const handleChange = (name: string, value: string) => {
+    setDisableSubmit(false);
+    setUpdateError("");
+    setProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      setupdateLoading(true);
+      const res = await editUserProfile(
+        profile.username,
+        profile.bio,
+        profile.storagePath,
+        newImage
+      );
+      if (!res.success) {
+        throw new Error(res.reason);
+      }
+      toast.success("Updated profile");
+      navigate(`/user/${id}`);
+    } catch (error: any) {
+      console.log(error);
+      setUpdateError(error.message || "Something went wrong");
+    } finally {
+      setupdateLoading(false);
+    }
+  };
   if (loading) return <>Loading...</>;
   if (error) return <p className="text-red-500">{error}</p>;
   return (
     <>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="relative w-28 h-28">
           <img
             src={preview || profile.imageUrl}
@@ -84,6 +118,7 @@ const EditProfilePage = () => {
             accept="image/*"
             className="hidden"
             onChange={(e) => {
+              setDisableSubmit(false);
               const file = e.target.files?.[0];
               if (file) {
                 setNewImage(file);
@@ -98,6 +133,7 @@ const EditProfilePage = () => {
           name="username"
           value={profile.username}
           required
+          onChange={(e) => handleChange("username", e.target.value)}
         />
         <Textarea
           placeholder="add your bio..."
@@ -105,11 +141,12 @@ const EditProfilePage = () => {
           name="bio"
           value={profile.bio}
           required
+          onChange={(e) => handleChange("bio", e.target.value)}
         />
         <Button
           type="submit"
           className="max-w-24 bg-green-600 hover:bg-green-700"
-          disabled={loading}
+          disabled={updateLoading || disableSubmit}
         >
           {updateLoading ? "Updating" : "Update"}
         </Button>
