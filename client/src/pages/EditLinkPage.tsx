@@ -5,9 +5,11 @@ import { getLinks, editLinks, deleteLink } from "@/services/firestore";
 import { Button } from "@/components/ui/button";
 import EditLink from "@/components/EditLink";
 import { toast } from "sonner";
+
 const EditLinkPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [links, setLinks] = useState([
     {
       id: "",
@@ -16,12 +18,23 @@ const EditLinkPage = () => {
       platform: "",
     },
   ]);
+
+  const [originalLinks, setOriginalLinks] = useState([
+    {
+      id: "",
+      uid: "",
+      url: "",
+      platform: "",
+    },
+  ]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,15 +42,18 @@ const EditLinkPage = () => {
           navigate("/");
           return;
         }
+
         const user = auth.currentUser;
         if (!user) {
           navigate("/login");
           return;
         }
+
         if (user.uid !== id) {
           navigate("/");
           return;
         }
+
         const res = await getLinks(id);
         if (!res.success) {
           const errorMsg = res.reason || "Failed to retrieve links";
@@ -45,8 +61,8 @@ const EditLinkPage = () => {
         }
 
         setLinks(res.results || []);
+        setOriginalLinks(res.results || []); // store original for diff check
       } catch (err: any) {
-        console.log(err);
         setError(err.message || "Some error occurred");
       } finally {
         setLoading(false);
@@ -66,15 +82,29 @@ const EditLinkPage = () => {
     e.preventDefault();
     try {
       setSaving(true);
-      const body = links.map((link) => ({
+
+      // Identify modified links
+      const modifiedLinks = links.filter((link, idx) => {
+        const original = originalLinks[idx];
+        return original.url !== link.url || original.platform !== link.platform;
+      });
+
+      if (modifiedLinks.length === 0) {
+        toast("No changes to update");
+        return;
+      }
+
+      const body = modifiedLinks.map((link) => ({
         id: link.id,
         url: link.url,
         platform: link.platform,
       }));
+
       const res = await editLinks(body);
       if (!res.success) {
         throw new Error(res.reason);
       }
+
       toast.success("Updated links successfully");
       navigate(`/user/${id}`);
     } catch (error: any) {
@@ -92,10 +122,12 @@ const EditLinkPage = () => {
       if (!res.success) {
         throw new Error(res.reason);
       }
+
       setLinks((prev) => prev.filter((item) => item.id !== id));
+      setOriginalLinks((prev) => prev.filter((item) => item.id !== id));
+
       toast.success("Successfully deleted");
     } catch (error: any) {
-      console.log(error);
       setDeleteError(error.message || "Something went wrong");
     } finally {
       setDeleting(false);
@@ -103,6 +135,7 @@ const EditLinkPage = () => {
   };
 
   if (loading) return <>Loading...</>;
+
   if (!links || links.length === 0)
     return (
       <div className="flex flex-col items-start gap-4 mt-6">
@@ -110,7 +143,9 @@ const EditLinkPage = () => {
         <Button onClick={() => navigate("/new")}>Add links</Button>
       </div>
     );
+
   if (error) return <>{error}</>;
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
       {links.map((link) => (
@@ -122,6 +157,7 @@ const EditLinkPage = () => {
           deleting={deleting}
         />
       ))}
+
       <Button
         type="submit"
         className="max-w-28 bg-green-600 mt-4 hover:bg-green-700"
@@ -129,6 +165,7 @@ const EditLinkPage = () => {
       >
         Save changes
       </Button>
+
       {submitError && <p>{submitError}</p>}
       {deleteError && <p>{deleteError}</p>}
     </form>
