@@ -22,7 +22,7 @@ const Hero = ({
         <img
           src={profile.imageUrl === "" ? pfp : profile.imageUrl}
           alt="profile-pic"
-          className="w-28 h-28 rounded-full"
+          className="w-28 h-28 rounded-full object-cover cursor-pointer"
         />
       </div>
       <div className="flex flex-col justify-center">

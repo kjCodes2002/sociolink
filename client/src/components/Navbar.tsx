@@ -3,6 +3,17 @@ import { Button } from "./ui/button";
 import { logout } from "@/services/firebaseAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { User } from "firebase/auth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const navigate = useNavigate();
@@ -39,14 +50,43 @@ const Navbar = ({ user }: { user: User | null }) => {
         <span className="text-mainTextDark">Socio</span>
         <span className="text-green-500">Link</span>
       </h2>
-      <Button
-        variant={user ? "outline" : "default"}
-        size={"sm"}
-        onClick={() => handleClick()}
-        disabled={loading}
-      >
-        {user ? "Log Out" : "Log In"}
-      </Button>
+      {!user && (
+        <Button size={"sm"} onClick={() => handleClick()} disabled={loading}>
+          Log In
+        </Button>
+      )}
+      {/* logout */}
+      {user && (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size={"sm"}
+              disabled={loading}
+            >
+              Log Out
+            </Button>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Do you want to log out?</AlertDialogTitle>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleClick()}
+                className="bg-red-500 hover:bg-red-600
+              "
+              >
+                Log Out
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 };
