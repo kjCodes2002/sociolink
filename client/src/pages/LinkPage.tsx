@@ -23,7 +23,7 @@ const LinkPage = () => {
     },
   ]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [_error, setError] = useState("");
   const user = auth.currentUser;
   const isOwner = user ? user.uid === id : false;
   useEffect(() => {
@@ -67,7 +67,7 @@ const LinkPage = () => {
   return (
     <div>
       <Hero profile={profile} id={id} isOwner={isOwner} />
-      <LinkSection links={links} error={error} isOwner={isOwner} id={id} />
+      <LinkSection links={links} isOwner={isOwner} id={id} />
       <Footer isOwner={isOwner} />
     </div>
   );

@@ -46,7 +46,7 @@ const CreateLinkPage = () => {
 
   const handleRemove = (e: any, idx: number) => {
     e.preventDefault();
-    setLinks((prev) => prev.filter((item, i) => i !== idx));
+    setLinks((prev) => prev.filter((_item, i) => i !== idx));
   };
 
   const handleSubmit = async (e: any) => {

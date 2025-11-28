@@ -10,11 +10,10 @@ type LinkItem = {
 
 type LinkSectionProps = {
   links: LinkItem[];
-  error: string;
   isOwner: boolean;
   id: string | undefined;
 };
-const LinkSection = ({ links, error, isOwner, id }: LinkSectionProps) => {
+const LinkSection = ({ links, isOwner, id }: LinkSectionProps) => {
   const navigate = useNavigate();
   if (!links || links.length === 0) return <>No links to show</>;
   return (

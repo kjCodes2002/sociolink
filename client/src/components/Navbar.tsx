@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { logout } from "@/services/firebaseAuth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { User } from "firebase/auth";
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -17,9 +16,8 @@ import {
 
 const Navbar = ({ user }: { user: User | null }) => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [_error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
 
   const handleClick = async () => {
     try {
