@@ -112,7 +112,7 @@ const CreateLinkPage = () => {
             className="max-w-20 bg-green-600 hover:bg-green-700"
             disabled={loading}
           >
-            Add
+            {loading ? "Adding" : "Add"}
           </Button>
         </div>
       </form>

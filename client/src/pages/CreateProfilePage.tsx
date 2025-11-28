@@ -34,6 +34,7 @@ const CreateProfilePage = () => {
     if (!user) {
       navigate("/login");
       setLoading(false);
+      return;
     }
     try {
       const res = await createUserProfile(
@@ -49,7 +50,7 @@ const CreateProfilePage = () => {
         setError("This user already has a profile");
         return;
       }
-      navigate("/");
+      navigate(`/user/${user.uid}`);
       console.log("User profile created");
     } catch (error) {
       console.log("something went wrong");

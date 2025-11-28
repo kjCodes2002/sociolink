@@ -37,6 +37,7 @@ const Hero = ({
           onClick={() => {
             navigate(`/user/${id}/editProfile`);
           }}
+          className="ml-auto"
         >
           Edit Profile
         </Button>

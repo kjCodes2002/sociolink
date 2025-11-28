@@ -163,7 +163,7 @@ const EditLinkPage = () => {
         className="max-w-28 bg-green-600 mt-4 hover:bg-green-700"
         disabled={saving}
       >
-        Save changes
+        {saving ? "Saving" : "Save changes"}
       </Button>
 
       {submitError && <p>{submitError}</p>}
