@@ -43,7 +43,7 @@ export const createUserProfile = async (
       .from("profile-images")
       .upload(fileName, image, {
         contentType: image.type,
-        cacheControl: "3600",
+        cacheControl: "0",
         upsert: false,
       });
 
@@ -105,7 +105,7 @@ export const editUserProfile = async (
         .from("profile-images")
         .update(storagePath, image, {
           contentType: image.type,
-          cacheControl: "3600",
+          cacheControl: "0",
           upsert: true,
         });
       if (updateError) throw updateError;
