@@ -39,7 +39,7 @@ export const createUserProfile = async (
   if (image) {
     const fileName = `${user.uid}-${Date.now()}`;
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { data: _uploadData, error: uploadError } = await supabase.storage
       .from("profile-images")
       .upload(fileName, image, {
         contentType: image.type,
@@ -101,7 +101,7 @@ export const editUserProfile = async (
     let newStoragePath = null;
 
     if (image && storagePath) {
-      const { data: updateData, error: updateError } = await supabase.storage
+      const { data: _updateData, error: updateError } = await supabase.storage
         .from("profile-images")
         .update(storagePath, image, {
           contentType: image.type,
@@ -112,7 +112,7 @@ export const editUserProfile = async (
     } else if (image) {
       const fileName = `${user.uid}-${Date.now()}`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { data: _uploadData, error: uploadError } = await supabase.storage
         .from("profile-images")
         .upload(fileName, image, {
           contentType: image.type,
