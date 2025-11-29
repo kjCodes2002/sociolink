@@ -11,26 +11,28 @@ const Footer = ({ isOwner }: { isOwner: boolean }) => {
       >
         {isOwner ? "Add more links" : "Create your link"}
       </Link>
-      <Button
-        type="button"
-        className="bg-green-600 hover:bg-green-700 cursor-pointer"
-        disabled={copying}
-        onClick={async () => {
-          setCopying(true);
-          const copyUrl = window.location.href;
-          const type = "text/plain";
-          const clipboardItemData = {
-            [type]: copyUrl,
-          };
-          const clipboardItem = new ClipboardItem(clipboardItemData);
-          await navigator.clipboard.write([clipboardItem]);
-          setTimeout(() => {
-            setCopying(false);
-          }, 3000);
-        }}
-      >
-        {copying ? "Copied" : "Copy URL"}
-      </Button>
+      {isOwner && (
+        <Button
+          type="button"
+          className="bg-green-600 hover:bg-green-700 cursor-pointer"
+          disabled={copying}
+          onClick={async () => {
+            setCopying(true);
+            const copyUrl = window.location.href;
+            const type = "text/plain";
+            const clipboardItemData = {
+              [type]: copyUrl,
+            };
+            const clipboardItem = new ClipboardItem(clipboardItemData);
+            await navigator.clipboard.write([clipboardItem]);
+            setTimeout(() => {
+              setCopying(false);
+            }, 3000);
+          }}
+        >
+          {copying ? "Copied" : "Copy URL"}
+        </Button>
+      )}
     </div>
   );
 };
