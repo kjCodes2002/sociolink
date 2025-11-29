@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { useState } from "react";
 const Footer = ({ isOwner }: { isOwner: boolean }) => {
+  const [copying, setCopying] = useState(false);
   return (
     <div className="flex flex-col items-center">
       <Link
@@ -8,10 +11,26 @@ const Footer = ({ isOwner }: { isOwner: boolean }) => {
       >
         {isOwner ? "Add more links" : "Create your link"}
       </Link>
-      <div className="flex flex-col items-center text-mainTextDark font-medium">
-        <p>Let's link your socials!</p>
-        <p>©2025 SocioLink || All Rights Reserved</p>
-      </div>
+      <Button
+        type="button"
+        className="bg-green-600 hover:bg-green-700 cursor-pointer"
+        disabled={copying}
+        onClick={async () => {
+          setCopying(true);
+          const copyUrl = window.location.href;
+          const type = "text/plain";
+          const clipboardItemData = {
+            [type]: copyUrl,
+          };
+          const clipboardItem = new ClipboardItem(clipboardItemData);
+          await navigator.clipboard.write([clipboardItem]);
+          setTimeout(() => {
+            setCopying(false);
+          }, 3000);
+        }}
+      >
+        {copying ? "Copied" : "Copy URL"}
+      </Button>
     </div>
   );
 };

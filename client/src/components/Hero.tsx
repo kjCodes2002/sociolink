@@ -17,7 +17,7 @@ const Hero = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex gap-3 mb-8">
+    <div className="flex gap-3 mb-0">
       <div>
         <img
           src={profile.imageUrl === "" ? pfp : profile.imageUrl}
