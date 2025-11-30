@@ -27,7 +27,7 @@ const Footer = ({ isOwner }: { isOwner: boolean }) => {
             await navigator.clipboard.write([clipboardItem]);
             setTimeout(() => {
               setCopying(false);
-            }, 3000);
+            }, 1000);
           }}
         >
           {copying ? "Copied" : "Copy URL"}
